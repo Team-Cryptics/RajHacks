@@ -8,6 +8,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.ToxicBakery.viewpager.transforms.CubeInTransformer;
+import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
+
 public class BillboardActivity extends AppCompatActivity {
 
 
@@ -24,6 +27,7 @@ public class BillboardActivity extends AppCompatActivity {
         mAdapter = new MapsActivity.TabsPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
+        viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
 
     }
 
