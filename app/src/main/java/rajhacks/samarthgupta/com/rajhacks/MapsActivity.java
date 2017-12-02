@@ -30,9 +30,10 @@ import com.google.gson.GsonBuilder;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
-    public static String startTime, startTimeAmPm, endTime, endTimeAmPm, maxBid, urlGraph;
-    String url = "http://192.168.43.189/rds.php";
+    public static String baseUrl = "http://192.168.43.189:5000";
     public static Slots[] list;
+    public static double maxBid = 0.0;
+    public static int startTimeFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (!marker.getTitle().equals("Your Location")) {
             Log.d("TAG","IN");
 
-            Volley.newRequestQueue(this).add(new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            Volley.newRequestQueue(this).add(new StringRequest(Request.Method.GET, baseUrl, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Log.d("TAG",response);
@@ -125,11 +126,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             Bundle bundle = new Bundle();
             BillBoardFragment frag = new BillBoardFragment();
-
+            startTimeFrag = list[position].getFromTime();
             bundle.putInt("from", list[position].getFromTime());
             bundle.putInt("to", list[position].getToTime());
-            bundle.putString("url", list[position].getUrlImage());
+            bundle.putString("baseUrl", list[position].getUrlImage());
             bundle.putDouble("est", list[position].getEstTraffic());
+            bundle.putString("mbid",list[position].getMaxBid());
+            maxBid = Double.parseDouble(list[position].getMaxBid());
             frag.setArguments(bundle);
             return frag;
 

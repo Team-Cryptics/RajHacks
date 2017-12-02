@@ -9,6 +9,15 @@ public class Slots {
     private Integer toTime;
     private String urlImage;
     private Double estTraffic;
+    private String maxBid;
+
+    public String getMaxBid() {
+        return maxBid;
+    }
+
+    public void setMaxBid(String maxBid) {
+        this.maxBid = maxBid;
+    }
 
     public Integer getFromTime() {
         return fromTime;

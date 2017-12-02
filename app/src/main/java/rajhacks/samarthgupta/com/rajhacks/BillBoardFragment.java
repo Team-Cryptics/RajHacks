@@ -26,9 +26,10 @@ public class BillBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String imUrl = this.getArguments().getString("url");
+        String imUrl = this.getArguments().getString("baseUrl");
         int from = this.getArguments().getInt("from");
         int to = this.getArguments().getInt("to");
+
         String fromAmPm, toAmPm;
         String est = Integer.toString((int)this.getArguments().getDouble("est"));
         Log.d("TAG","Image"+ imUrl);
@@ -67,7 +68,6 @@ public class BillBoardFragment extends Fragment {
 
         ivGraph = (ImageView) v.findViewById(R.id.iv_slot);
         Picasso.with(getActivity()).load("http://"+imUrl).into(ivGraph);
-
 
 
         return v;
