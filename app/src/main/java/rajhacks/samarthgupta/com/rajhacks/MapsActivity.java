@@ -1,17 +1,20 @@
 package rajhacks.samarthgupta.com.rajhacks;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Toast;
+import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,15 +25,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import com.google.gson.GsonBuilder;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     public static String startTime, startTimeAmPm, endTime, endTimeAmPm, maxBid, urlGraph;
+    String url = "http://192.168.43.189/rds.php";
+    public static Slots[] list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +73,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 cameraPosition));
         mMap.addMarker(new MarkerOptions().position(current).title("Your Location"));
 
-        setMarker(new LatLng(24.4354644, 73.7325463),"BB101",1);
-        setMarker(new LatLng(24.324644, 73.7324323),"BB102",2);
-        setMarker(new LatLng(24.2134644, 73.11235463),"BB103",3);
+        setMarker(new LatLng(24.4354644, 73.7325463), "BB101", 1);
+        setMarker(new LatLng(24.324644, 73.7324323), "BB102", 2);
+        setMarker(new LatLng(24.2134644, 73.11235463), "BB103", 3);
         mMap.setOnMarkerClickListener(this);
 
     }
 
-    void setMarker(LatLng latLng, String title, int i){
+    void setMarker(LatLng latLng, String title, int i) {
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.bbicon);
         mMap.addMarker(new MarkerOptions().position(latLng).title(title).icon(icon)).setTag(i);
     }
@@ -87,12 +89,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        switch (Integer.parseInt(marker.getTag().toString())){
+        if (!marker.getTitle().equals("Your Location")) {
+            Log.d("TAG","IN");
 
-            //Set variables after api call
-            default:
-            Toast.makeText(this, "Marker tag"+ marker.getTag().toString(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MapsActivity.this,BillboardActivity.class));
+            Volley.newRequestQueue(this).add(new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("TAG",response);
+                    list = new GsonBuilder().create().fromJson(response, Slots[].class);
+                    startActivity(new Intent(MapsActivity.this, BillboardActivity.class));
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }));
+
+
         }
 
         return true;
@@ -111,30 +126,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Bundle bundle = new Bundle();
             BillBoardFragment frag = new BillBoardFragment();
 
-            //Send vars to frag
+            bundle.putInt("from", list[position].getFromTime());
+            bundle.putInt("to", list[position].getToTime());
+            bundle.putString("url", list[position].getUrlImage());
+            bundle.putDouble("est", list[position].getEstTraffic());
+            frag.setArguments(bundle);
+            return frag;
 
-            switch (position) {
-                case 0:
-                    bundle.putString("Url",urlGraph);
-                    frag.setArguments(bundle);
-                    return frag;
-                case 1:
-                    bundle.putString("Url", "http://www.selectiveschoolexam.com/wp-content/uploads/2015/07/graph2.jpg?x86383");
-                    frag.setArguments(bundle);
-                    return frag;
-                case 2:
-                    bundle.putString("Url", "http://www.selectiveschoolexam.com/wp-content/uploads/2015/07/graph2.jpg?x86383");
-                    frag.setArguments(bundle);
-                    return frag;
-            }
-
-
-            return null;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 6;
         }
     }
 }

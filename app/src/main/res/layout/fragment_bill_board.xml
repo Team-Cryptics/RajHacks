@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="rajhacks.samarthgupta.com.rajhacks.BillBoardFragment">
 
     <ScrollView
@@ -13,99 +14,176 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Slot Number"
-                android:padding="10sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                android:gravity="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:id="@+id/tv_slot_number"/>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10sp"
                 android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="20sp">
+
+                <TextView
+                    android:id="@+id/tv_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/green"
+                    android:padding="8sp"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="5sp"
+                    android:text="am"
+                    android:textColor="@color/green"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30sp"
+                    android:background="@color/green"
+                    android:padding="8sp"
+                    android:text="7"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="5sp"
+                    android:text="am"
+                    android:textColor="@color/green"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="3"
-                    android:id="@+id/tv_start_time"
-                    android:textSize="35sp"
-                    android:textStyle="bold"
-                    android:padding="8sp"
-                    android:background="@color/green"
-                    android:textColor="@color/white"
-                    />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Maximum Bid"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@string/rs"
+                            android:textColor="#000"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_max_bid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="0.0"
+                            android:textColor="#000"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_start"
-                    android:text="am"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:padding="5sp"
-                    android:background="@color/white"
-                    android:textColor="@color/green"
-                    />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Estimated Traffic"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_estimated_traffic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="0.0"
+                            android:textColor="#000"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="VS"
+                            android:textColor="#000"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_end_time"
-                    android:layout_marginStart="30sp"
-                    android:text="7"
-                    android:textSize="35sp"
-                    android:textStyle="bold"
-                    android:padding="8sp"
-                    android:background="@color/green"
-                    android:textColor="@color/white"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_end"
-                    android:text="am"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:padding="5sp"
-                    android:background="@color/white"
-                    android:textColor="@color/green"
-                    />
+                </LinearLayout>
 
 
             </LinearLayout>
 
 
-
-
-
             <ImageView
+                android:id="@+id/iv_slot"
+                android:scaleType="fitXY"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/iv_slot" />
-
+                android:layout_height="match_parent" />
 
 
         </LinearLayout>
 
 
-
-
     </ScrollView>
-
-
-
-
 
 
 </RelativeLayout>
