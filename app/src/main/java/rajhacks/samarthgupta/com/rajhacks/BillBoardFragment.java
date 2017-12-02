@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 public class BillBoardFragment extends Fragment {
     TextView tvSlotStartTime, tvSlotStart, tvSlotEndTime, tvSlotEnd, tvEst;
     ImageView ivGraph;
+    TextView tvMaxBid;
 
 
     @Override
@@ -37,6 +38,7 @@ public class BillBoardFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_bill_board, container, false);
         tvSlotStartTime = (TextView) v.findViewById(R.id.tv_start_time);
         tvSlotStart = (TextView) v.findViewById(R.id.tv_start);
+        tvMaxBid = (TextView) v.findViewById(R.id.tv_max_bid);
         tvSlotEndTime = (TextView) v.findViewById(R.id.tv_end_time);
         tvSlotEnd= (TextView) v.findViewById(R.id.tv_end);
         tvEst = (TextView) v.findViewById(R.id.tv_estimated_traffic);
@@ -57,6 +59,8 @@ public class BillBoardFragment extends Fragment {
             toAmPm = "am";
         }
 
+
+        tvMaxBid.setText(this.getArguments().getString("mbid"));
 
         tvSlotStart.setText(fromAmPm);
         tvSlotStartTime.setText(Integer.toString(from));

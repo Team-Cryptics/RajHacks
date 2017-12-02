@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -30,10 +31,8 @@ import com.google.gson.GsonBuilder;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
-    public static String baseUrl = "http://192.168.43.189:5000";
+    public static String baseUrl = "http://192.168.43.189:33";
     public static Slots[] list;
-    public static double maxBid = 0.0;
-    public static int startTimeFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +97,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onResponse(String response) {
                     Log.d("TAG",response);
                     list = new GsonBuilder().create().fromJson(response, Slots[].class);
-                    startActivity(new Intent(MapsActivity.this, BillboardActivity.class));
+                    startActivity(new Intent(MapsActivity.this, BillboardActivity.class).putExtra("data",response));
 
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    Log.d("Err",error.toString());
+                }
+            })).setRetryPolicy(new RetryPolicy() {
+                @Override
+                public int getCurrentTimeout() {
+                    return 0;
+                }
+
+                @Override
+                public int getCurrentRetryCount() {
+                    return 0;
+                }
+
+                @Override
+                public void retry(VolleyError error) throws VolleyError {
 
                 }
-            }));
+            });
 
 
         }
@@ -124,15 +138,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         public Fragment getItem(int position) {
 
+            Log.d("Max","Pos"+position);
             Bundle bundle = new Bundle();
             BillBoardFragment frag = new BillBoardFragment();
-            startTimeFrag = list[position].getFromTime();
+
             bundle.putInt("from", list[position].getFromTime());
             bundle.putInt("to", list[position].getToTime());
             bundle.putString("baseUrl", list[position].getUrlImage());
             bundle.putDouble("est", list[position].getEstTraffic());
             bundle.putString("mbid",list[position].getMaxBid());
-            maxBid = Double.parseDouble(list[position].getMaxBid());
+
             frag.setArguments(bundle);
             return frag;
 

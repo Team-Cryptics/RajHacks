@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,14 +32,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static rajhacks.samarthgupta.com.rajhacks.MapsActivity.baseUrl;
-import static rajhacks.samarthgupta.com.rajhacks.MapsActivity.maxBid;
-import static rajhacks.samarthgupta.com.rajhacks.MapsActivity.startTimeFrag;
-
 public class BillboardActivity extends AppCompatActivity {
 
 
@@ -47,21 +47,25 @@ public class BillboardActivity extends AppCompatActivity {
     Button btPlaceBet;
     Bitmap bitmap;
 
+    Slots[] list;
 
+    int user =2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_billboard);
 
+        list = new GsonBuilder().create().fromJson(getIntent().getStringExtra("data"),Slots[].class);
+
         viewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new MapsActivity.TabsPagerAdapter(getSupportFragmentManager());
-
-
         btPlaceBet = (Button) findViewById(R.id.bt_place_bet);
         btPlaceBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
 
                 btPlaceBet.setVisibility(View.GONE);
                 final Dialog dial = new Dialog(BillboardActivity.this);
@@ -87,13 +91,17 @@ public class BillboardActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         //Check input value
                         Double bid = Double.parseDouble(etBid.getText().toString());
-                        if(bid>maxBid){
-                            postBidOnServer(bid,1,startTimeFrag);
-                        }
+                        int pos = viewPager.getCurrentItem();
+                        Double maxBid = Double.parseDouble(list[pos].getMaxBid());
 
-                        else{
-                            Toast.makeText(BillboardActivity.this, "Your bid is less than the current maximum bid", Toast.LENGTH_SHORT).show();
-                        }
+                        postBidOnServer(bid,user,list[pos].getFromTime());
+
+
+//                        else{
+//
+//                            Log.d("Max",maxBid+"");
+//                            Toast.makeText(BillboardActivity.this, "Your bid is less than the current maximum bid", Toast.LENGTH_SHORT).show();
+//                        }
 
 
 
@@ -114,13 +122,25 @@ public class BillboardActivity extends AppCompatActivity {
     }
 
     private void postBidOnServer(Double bid, int user, int startTimeFrag) {
-        String url = baseUrl + "win_bid.php?"+"maxbid="+bid+"&winner="+user+"&time="+startTimeFrag;
+        String url = baseUrl.replace(":33","")+"/" + "win_bid.php?"+"maxbid="+bid+"&winner="+user+"&time="+startTimeFrag;
 
+        Log.d("URL",url);
         Volley.newRequestQueue(BillboardActivity.this).add(new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Toast.makeText(BillboardActivity.this, "Bid posted successfully", Toast.LENGTH_SHORT).show();
+
+                if(response.equals("true")){
+                    Toast.makeText(BillboardActivity.this, "Bid posted successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(BillboardActivity.this, MapsActivity.class));
+                    finish();
+                }
+
+                else{
+                    Toast.makeText(BillboardActivity.this, "Current maximum bid has changed to "+response, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(BillboardActivity.this, MapsActivity.class));
+                    finish();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
